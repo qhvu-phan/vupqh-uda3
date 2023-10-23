@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  AWS_BUCKET: bucket-vupqh
+  POSTGRES_HOST: rds-udacity.clfkpe8rw1ta.us-east-1.rds.amazonaws.com
+  URL: http://a41bd1db556be4f7cba5a2e6d3d2e5d4-1687430433.us-west-2.elb.amazonaws.com
+metadata:
+  name: vupqh-env-configmap

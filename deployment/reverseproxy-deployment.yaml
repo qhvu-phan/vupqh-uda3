@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverseproxy-vupqh
+  labels:
+    app: reverseproxy-vupqh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reverseproxy-vupqh
+  template:
+    metadata:
+      labels:
+        app: reverseproxy-vupqh
+    spec:
+      containers:
+      - name: udagram-reverseproxy
+        image: vupqh/udagram-reverseproxy:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always

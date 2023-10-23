@@ -1,0 +1,40 @@
+version: 2.1
+
+jobs:
+  dockerhub-p3-uda:
+      machine:
+        image: ubuntu-2204:2022.04.2
+      steps:
+        - checkout
+        - run:
+            name: Login to dockerhub
+            command: |
+              echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+        - run:
+            name: Deploy udagram-api-feed to Dockerhub
+            command: |
+              docker build -t udagram-api-feed ./udagram-api-feed
+              docker tag udagram-api-feed vupqh/udagram-api-feed:v1
+              docker push vupqh/udagram-api-feed:v1
+        - run:
+            name: Deploy udagram-api-user to Dockerhub
+            command: |
+              docker build -t udagram-api-user ./udagram-api-user
+              docker tag udagram-api-user vupqh/udagram-api-user:v1
+              docker push vupqh/udagram-api-user:v1
+        - run:
+            name: Deploy udagram-frontend to Dockerhub
+            command: |
+              docker build -t udagram-frontend ./udagram-frontend
+              docker tag udagram-frontend vupqh/udagram-frontend:v1
+              docker push vupqh/udagram-frontend:v1
+        - run:
+            name: Deploy udagram-reverseproxy to Dockerhub
+            command: |
+              docker build -t udagram-reverseproxy ./udagram-reverseproxy
+              docker tag udagram-reverseproxy vupqh/udagram-reverseproxy:v1
+              docker push vupqh/udagram-reverseproxy:v1
+workflows:
+  default:
+    jobs:
+      - dockerhub-p3-uda

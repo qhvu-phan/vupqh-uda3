@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-user-vupqh
+  labels:
+    app: backend-user-vupqh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-user-vupqh
+  template:
+    metadata:
+      labels:
+        app: backend-user-vupqh
+    spec:
+      containers:
+      - name: udagram-api-user
+        image: vupqh/udagram-api-user:v1
+        env:
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-env-secret
+              key: POSTGRES_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-env-secret
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-env-secret
+              key: POSTGRES_DB
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-env-secret
+              key: JWT_SECRET
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: vupqh-env-configmap
+              key:  POSTGRES_HOST
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-aws-secret
+              key: AWS_REGION
+        - name: AWS_PROFILE
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-aws-secret
+              key: AWS_PROFILE
+        - name: AWS_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: vupqh-env-configmap
+              key:  AWS_BUCKET
+        - name: URL
+          valueFrom:
+            configMapKeyRef:
+              name: vupqh-env-configmap
+              key:  URL
+        - name: AWS_DEFAULT_REGION
+          valueFrom:
+            secretKeyRef:
+              name: vupqh-aws-secret
+              key: AWS_DEFAULT_REGION
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: aws-secret
+          mountPath: "/root/.aws/"
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: aws-secret
+        secret:
+          secretName: vupqh-aws-secret
